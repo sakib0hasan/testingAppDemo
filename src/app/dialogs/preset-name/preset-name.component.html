@@ -1,0 +1,11 @@
+<h2 mat-dialog-title class="margin-0f">Save Preset</h2>
+<div class="margin-0" style="width: 100%; min-height: 1px; background-color: #007bff"></div>
+<mat-dialog-content class="margin-top-10-f">
+    <mat-form-field>
+        <input matInput [(ngModel)]="name" placeholder="Enter preset name">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="name">Okay</button>
+</mat-dialog-actions>

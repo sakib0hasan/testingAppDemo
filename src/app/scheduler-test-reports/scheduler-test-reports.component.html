@@ -1,0 +1,38 @@
+<div class="box-shadow app-wrapper">
+
+    <div fxFlex fxLayout="row" class="margin-top-10" fxLayoutAlign="space-between center">
+        <button mat-button (click)="backToTestReports()"><mat-icon>keyboard_arrow_left</mat-icon>{{ paramsId }}</button>
+    </div>
+
+    <div class="padding-16">
+        <p class="margin-0">Name: {{ testName }}</p>
+        <p class="margin-0">Presets: {{ presetName }}</p>
+        <p class="margin-0">Running Test: {{ runningTest }}</p>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">Server / Task</th>
+            <th scope="col" class="align-middle">Result</th>
+            <th scope="col" class="align-middle">Status</th>
+            <th scope="col" class="align-middle">Performance</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of reports">
+            <td class="align-middle">{{report.server}}</td>
+            <td class="align-middle green-color">{{report.result}}</td>
+            <td class="align-middle green-color">{{report.status}}</td>
+            <td class="align-middle green-color">{{report.performance}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+        <div class="performance padding-16" style="text-align: center">
+            <p class="align-middle margin-0f">Passed in 850s</p>
+        </div>
+    </div>
+
+</div>

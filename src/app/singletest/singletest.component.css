@@ -1,0 +1,28 @@
+.test-status-passed {
+    background: #3ab54b;
+    color: white;
+    height: 52px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 3px;
+}
+.test-status-failed{
+    background: #c1282d;
+    color: white;
+    height: 52px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 3px;
+}
+.green{
+    color: green;
+}
+.blue{
+    color: blue;
+}
+.red{
+    color: red;
+}
+
+
+

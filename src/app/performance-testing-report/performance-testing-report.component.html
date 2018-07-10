@@ -1,0 +1,11 @@
+<div class="box-shadow" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px; background: white;">
+    <div *ngIf="loading">
+        <h3>
+            Running Test
+        </h3>
+        <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+    <div *ngIf="!loading && reportLink != ''" style="height: 1000px;">
+        <iframe [src]="reportLink" style="height:100%;width:100%;border:none; padding: 20px;"></iframe>
+    </div>
+</div>

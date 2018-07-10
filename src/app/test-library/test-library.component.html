@@ -1,0 +1,49 @@
+<div class="box-shadow app-wrapper text-library-wrapper">
+    <div fxFlex fxLayout="row" class="margin-top-20" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" class="padding-horizontal-8" (click)="openUploadNewScriptsDialog()">Upload New Script</button>
+        <button (click)="downloadJMXTemplate();" mat-button class="margin-left-8f padding-horizontal-8">
+            <mat-icon style="margin-bottom: 5px">file_download</mat-icon>
+            Download .jmx Template
+        </button>
+    </div>
+
+    <div fxFlex fxLayout="column" class="margin-top-20">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchText" placeholder="Type to search..."
+                           [(ngModel)]="searchText" (ngModelChange)="searchChanged()" >
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">Project Type</th>
+            <th scope="col" class="align-middle">Library Name</th>
+            <th scope="col" class="align-middle">Script Name</th>
+            <th scope="col" class="align-middle">Required Parameters</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let script of scripts | TestLibraryFilter : searchText; let i = index">
+            <td class="align-middle">{{script.projectType}}</td>
+            <td class="align-middle">{{script.libraryName}}</td>
+            <td class="align-middle">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <span fxFlex>{{script.scriptName}}</span>
+                    <mat-icon class="cursor-pointer">file_download</mat-icon>
+                </div>
+            </td>
+            <td class="align-middle">{{script.requiredParams}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--<div fxFlex fxLayout="row" fxLayoutAlign="center center" *ngIf="!fakeScript.length">-->
+        <!--<strong><p>Empty Search Result! Try with another keyword!</p></strong>-->
+    <!--</div>-->
+
+</div>

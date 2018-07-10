@@ -1,0 +1,83 @@
+<div class="box-shadow app-wrapper">
+    <div fxFlex fxLayout="row" class="margin-top-10" fxLayoutAlign="space-between center">
+        <button mat-button (click)="backToScheduler()"><mat-icon>keyboard_arrow_left</mat-icon>{{ paramsId }}</button>
+    </div>
+
+    <div class="padding-16">
+        <p class="margin-0">Name: {{ testName }}</p>
+        <p class="margin-0">Preset: {{ presetName }}</p>
+    </div>
+
+    <div class="box-border-full margin-16f padding-8">
+        <h6 class="padding-8">Schedule Configuration</h6>
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between start">
+            <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+                <div class="margin-top-20">
+                    <p>1. Select Schedule Test Type</p>
+                    <mat-radio-group [(ngModel)]="schedulerTestType">
+                        <div *ngFor="let schedule of schedules">
+                            <mat-radio-button [value]="schedule.name" [disabled]="true">
+                                {{schedule.name}}
+                            </mat-radio-button>
+                            <p class="font-size-12 font-color-black-50">{{ schedule.sub }}</p>
+                        </div>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+                <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
+                    <div class="margin-top-20">
+                        <p>2. Select Schedule Time</p>
+                        <mat-radio-group [(ngModel)]="schedulerTestTime">
+                            <div *ngFor="let scheduleTime of schedulesTime">
+                                <mat-radio-button [value]="scheduleTime.name" [disabled]="true">
+                                    {{scheduleTime.name}}
+                                </mat-radio-button>
+                            </div>
+                        </mat-radio-group>
+
+                        <div fxFlex fxLayout="column" fxLayoutAlign="start center" *ngIf="schedulerTestTime === 'Scheduled Times per day'">
+
+                            <mat-form-field>
+                                <mat-chip-list #chipList [disabled]="true">
+                                    <mat-chip *ngFor="let time of selectedTimes; let i = index" color="primary" class="margin-4f">
+                                        {{time}}
+                                    </mat-chip>
+                                </mat-chip-list>
+                                <input [matChipInputFor]="chipList" disabled>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex fxLayout="row" fxLayoutAlign="start center" *ngIf="schedulerTestTime === 'After every x Minutes'">
+                            <mat-form-field>
+                                <input matInput placeholder="30 / 60 / 90 / 120" [(ngModel)]="schedulerTestCustomTime" disabled>
+                            </mat-form-field>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+                <div fxLayout="column" fxLayoutAlign="start start" fxFlex>
+                    <div class="margin-top-20">
+                        <p>3. Reporting</p>
+                        <mat-form-field>
+                            <input matInput placeholder="Enter test name" [(ngModel)]="schedulerTestName">
+                        </mat-form-field>
+                        <mat-checkbox [disabled]="true"
+                            [(ngModel)]="emailTo">Email to @admin@test.com
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="margin-16f" fxFlex fxLayout="row" fxLayoutAlign="end center">
+        <button mat-raised-button color="primary" (click)="viewTests()">View Reports</button>
+        <button mat-raised-button color="warn" class="margin-left-8f">Stop Schedule</button>
+    </div>
+
+</div>

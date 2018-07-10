@@ -1,0 +1,45 @@
+<div class="box-shadow app-wrapper">
+
+    <div class="margin-top-20" fxFlex fxLayout="column"
+         fxLayoutAlign="start start" (click)="createNewSchedule()">
+        <button mat-raised-button color="primary">
+            <mat-icon>add</mat-icon> Schedule a New Test
+        </button>
+    </div>
+
+    <div fxFlex fxLayout="column" class="margin-top-20">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchText" placeholder="Type to search..."
+                           [(ngModel)]="searchText" (ngModelChange)="searchChanged()">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">Name</th>
+            <th scope="col" class="align-middle">Preset</th>
+            <th scope="col" class="align-middle">Schedule</th>
+            <th scope="col" class="align-middle">Reports</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let schedule of schedules | CommonTableFilter : searchText : filterIndexIgnores ; let i = index"
+            (click)="scheduleReport(schedule)" class="cursor-pointer">
+            <td class="align-middle">{{schedule.scheduleName}}</td>
+            <td class="align-middle">{{schedule.presetNames}}</td>
+            <td class="align-middle">{{schedule.schedule}}</td>
+            <td class="align-middle"><button mat-button (click)="scheduleReport(schedule)">view</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--<div fxFlex fxLayout="row" fxLayoutAlign="center center" *ngIf="!filteredSchedules.length">-->
+        <!--<strong><p>Empty Search Result! Try with another keyword!</p></strong>-->
+    <!--</div>-->
+
+</div>

@@ -1,0 +1,148 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import '~@angular/material/theming';
+@import "custom-style";
+
+@include mat-core();
+
+$my-app-primary: mat-palette($mat-custom);
+$my-app-accent: mat-palette($mat-custom, 500, 500, 500);
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent);
+
+@include angular-material-theme($my-app-theme);
+
+.mat-step-header .mat-step-icon {
+    background-color: #007bff;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    background: #ededed;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.full-height {
+    min-height: 100%;
+    height: 100%;
+}
+
+
+.box-shadow {
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn-primary .btn ng-star-inserted {
+    margin: 0px 10px;
+    border-radius: 3px;
+}
+
+.full-height-vh {
+    height: calc(100vh - 66px) !important;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.margin-top-10-f {
+    margin-top: 10px !important;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.margin-bottom-20{
+    margin-bottom: 20px;
+}
+
+.margin-top-20-f {
+    margin-top: 20px !important;
+}
+
+.margin-0 {
+    margin: 0;
+}
+
+.margin-left-8{
+    margin-left: 8px;
+}
+
+.margin-left-8f{
+    margin-left: 8px !important;
+}
+
+.margin-0f {
+    margin: 0 !important;
+}
+
+.padding-0 {
+    padding: 0;
+}
+
+.padding-0f {
+    padding: 0 !important;
+}
+
+.app-wrapper {
+    padding: 10px 20px;
+    margin: 30px 20px;
+    border-radius: 3px;
+    background: white;
+    min-height: calc(100vh - 66px - 60px) !important;
+}
+
+.padding-vertical-8{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.padding-horizontal-8{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.padding-8{
+    padding: 8px;
+}
+
+.padding-16{
+    padding:16px;
+}
+
+button:focus{
+    outline: none !important;
+}
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+.text-library-wrapper{
+
+}
+
+.text-library-wrapper input:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.05) !important;
+}
+
+input[type="file"]:focus{
+    outline: none;
+}
+
+.progress-height-width{
+    height: 24px !important;
+    width: 24px !important;
+}

@@ -1,0 +1,40 @@
+.nav-item{
+    padding: 0 24px;
+    height: 55px;
+}
+.nav-link{
+    color: white;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px !important;
+}
+.active{
+    background: #414856;
+    border-radius: 50px;
+    font-size: 15px !important;
+}
+
+.sidebar-sticky{
+    padding-top: 0;
+}
+
+.optimo-nav-container {
+    position: absolute;
+    top: 65px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.optiomo-sidenav {
+    padding-top: 30px;
+    top: 65px !important;
+    width: 250px;
+    background: linear-gradient(to left,rgba(76, 85, 103, 1),rgba(76, 85, 103, .7)), url(https://s3.amazonaws.com/fzautomotive/images/gallery/Hyundai/2016_Genesis/Exterior/new_2016_hyundai_genesis_for_sale_exterior_rims_wheels_side_back_view_four_door_trunk_bumper_muffler_windows_side_mirrow.jpg);;
+    background-size: cover;
+}
+
+.optimo-sidenav-container{
+    background: rgba(76, 85, 103, 1);
+}
+

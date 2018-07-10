@@ -1,0 +1,96 @@
+<div class="box-shadow app-wrapper">
+    <div fxFlex fxLayout="row" class="margin-top-10" fxLayoutAlign="space-between center">
+        <button mat-button (click)="backToPresets()"><mat-icon>keyboard_arrow_left</mat-icon>{{ paramsId }}</button>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+            <button mat-button class="margin-left-8f padding-horizontal-8" (click)="deleteThePreset(paramsId)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button (click)="runPreset(paramsId)" mat-raised-button class="margin-left-8f padding-horizontal-8" color="primary">Run</button>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" class="margin-top-20 padding-16">
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>User Credentials</h6>
+            <div class="margin-top-20">
+                <p class="margin-0 padding-0">Email</p>
+                <p>{{ authInformation.email }}</p>
+            </div>
+            <div>
+                <p class="margin-0 padding-0">Password</p>
+                <p>{{ authInformation.password }}</p>
+            </div>
+            <div>
+                <p class="margin-0 padding-0">PIN</p>
+                <p>{{ authInformation.pin }}</p>
+            </div>
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>Scripts</h6>
+            <div class="margin-top-20" *ngFor="let testItem of testList">
+                <p class="margin-0">{{ testItem.testLibrary + '> ' + testItem.testCase }}</p>
+                <p class="margin-0" *ngIf="testItem.params.length">{{ testItem.params }}</p>
+                <p>{{ testItem.string }}</p>
+            </div>
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>IoT Devices</h6>
+
+            <div class="margin-top-20">
+                <mat-radio-group [(ngModel)]="IoTDevice">
+                    <mat-radio-button *ngFor="let device of IoTDevices" [value]="device" [disabled]="true">
+                        {{device}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <h6>Show results for:</h6>
+
+            <div class="margin-top-20">
+
+                <div>
+                    <mat-checkbox
+                        [(ngModel)]="showResultsFunctionality"
+                        [align]="checkBoxAlign"
+                        [disabled]="checkBoxDisabled">
+                        Functionality
+                    </mat-checkbox>
+                </div>
+
+                <div>
+                    <mat-checkbox
+                        [(ngModel)] = "checkBoxPerformance"
+                        [disabled]="checkBoxDisabled">
+                        Performance
+                    </mat-checkbox>
+                </div>
+
+            </div>
+
+            <h6 class="margin-top-20">Show results for:</h6>
+            <div class="margin-top-20">
+                <mat-radio-group [(ngModel)]="scriptSettings">
+                    <mat-radio-button *ngFor="let season of scripts" [value]="season" [disabled]="true">
+                        {{season}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6 class="margin-top-20">Environment</h6>
+            <div class="margin-top-20">
+                <mat-radio-group [(ngModel)]="currentServer">
+                    <div *ngFor="let env of environments">
+                        <mat-radio-button [value]="env" [disabled]="true">{{env}}</mat-radio-button>
+                    </div>
+                </mat-radio-group>
+            </div>
+        </div>
+
+    </div>
+
+</div>

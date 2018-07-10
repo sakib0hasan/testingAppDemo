@@ -1,0 +1,26 @@
+<div class="box-shadow app-wrapper">
+    <h3>All Tests</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">#</th>
+            <th scope="col" class="align-middle">Project Type</th>
+            <th scope="col" class="align-middle">Test Suite</th>
+            <th scope="col" class="align-middle">Environment</th>
+            <th scope="col" class="align-middle">Status</th>
+            <th scope="col" class="align-middle"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let t of alltests" (click)="gotoTestDetails(t.id, t.projectTypeLabel)" class="cursor-pointer">
+            <td class="align-middle">{{t.id}}</td>
+            <td class="align-middle">{{t.projectType}}</td>
+            <td class="align-middle">{{t.testSuite}}</td>
+            <td class="align-middle">{{t.environment}}</td>
+            <td class="align-middle" [ngStyle]="{'color': t.status === 'Failed' ? 'red' : 'green'}">{{t.status}}</td>
+            <td class="align-middle"><button mat-raised-button (click)="gotoTestDetails(t.id, t.projectTypeLabel)" color="primary">Details</button></td>
+        </tr>
+        </tbody>
+    </table>
+    <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+</div>

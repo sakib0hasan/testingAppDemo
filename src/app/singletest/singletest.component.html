@@ -1,0 +1,145 @@
+<div class="box-shadow" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px; background: white;">
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <h5>Test Run ID: {{testDetails['id']}}</h5>
+            <h5 [ngClass]="{'green': testDetails['status'] === 'Test Finished' || testDetails['status'] === 'Completed' || testDetails['status'] === 'Passed', 'blue': testDetails['status'] === 'Test In progress', 'red': testDetails['status'] === 'Failed'}">{{testDetails['status']}}</h5>
+        </div>
+        <div class="d-flex">
+            <div style="padding-right: 16px;">
+                <p style="margin: 0; font-size: 12px;">Server</p>
+                <h5>{{testDetails['environment']}}</h5>
+            </div>
+            <div style="padding-right: 16px;">
+                <p style="margin: 0; font-size: 12px;">Test Tool</p>
+                <h5>Jmeter</h5>
+            </div>
+            <div class="test-status-passed" *ngIf="testDetails['status'] === 'Completed' || testDetails['status'] === 'Passed'">
+                <h5>Passed in {{totalTime}}ms</h5>
+            </div>
+
+            <div class="test-status-failed" *ngIf="testDetails['status'] === 'Failed'">
+                <h5>Test Failed</h5>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Test Case #{{i+1}}" [selected]="true" *ngFor="let segment of testLiveLogs;let i = index">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Server/Task</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Performance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let log of segment">
+                    <td>{{log['task']}}</td>
+                    <td>
+                        {{log['result']}}
+
+                        <button *ngIf="log['command'] !== ''" (click)="speakCommand(log['command'])" mat-button>🔊 Play</button>
+                    </td>
+                    <td>{{log['status']}}</td>
+                    <td>{{log['responseTime']}} ms</td>
+                </tr>
+                </tbody>
+            </table>
+        </p-accordionTab>
+    </p-accordion>
+
+
+
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Test Case #{{i+1}}" [selected]="true" *ngFor="let segment of testLogDetails;let i = index">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Server/Task</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Performance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let log of segment">
+                    <td>{{log['task']}}</td>
+                    <td>
+                        {{log['result']}}
+
+                        <button *ngIf="log['command'] !== ''" (click)="speakCommand(log['command'])" mat-button>🔊 Play</button>
+                    </td>
+                    <td>{{log['status']}}</td>
+                    <td>{{log['responseTime']}} ms</td>
+                </tr>
+                </tbody>
+            </table>
+        </p-accordionTab>
+    </p-accordion>
+
+
+    <p-progressBar *ngIf="testDetails['status'] === 'Test In progress'" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+
+    <div *ngIf="otherTests.length > 0">
+        <p-accordion *ngIf="testDetails['status'] === 'Test Finished' || testDetails['status'] === 'Completed' || testDetails['status'] === 'Passed'">
+            <p-accordionTab header="Compare with a previous test">
+                <div>
+                    <p-dropdown [options]="otherTests" [(ngModel)]="selectedTest" optionLabel="id" [showClear]="true" placeholder="Select a test to compare"></p-dropdown>
+                    <button type="button" class="btn btn-primary" (click)="compareClicked()">Compare</button>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+    </div>
+</div>
+
+<div class="box-shadow" *ngIf="barChartData[0].data.length > 0" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px; background: white;">
+    <h5>Compare Results</h5>
+    <div>
+        <div style="display: block">
+            <canvas baseChart
+                    [datasets]="barChartData"
+                    [labels]="barChartLabels"
+                    [options]="barChartOptions"
+                    [legend]="barChartLegend"
+                    [chartType]="barChartType"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="box-shadow" *ngIf="barChartData[0].data.length > 0" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px; background: white;">
+    <h5>Details Comparison Results</h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Task</th>
+            <th scope="col">{{comparisons[0]['firstId']}}</th>
+            <th scope="col">{{comparisons[0]['secondId']}}</th>
+            <th scope="col">Difference</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let log of comparisons">
+            <td style="font-size: 1em;">{{log['task']}}</td>
+            <td style="font-size: 1em;">{{log['firstRT']}} ms</td>
+            <td style="font-size: 1em;">{{log['secondRT']}} ms</td>
+            <td style="font-size: 1em;">
+                <span style="color: red;" *ngIf="log['diffRT'] > 0">
+                    {{log['diffRT']}}ms Slower
+                </span>
+                <span style="color: green;" *ngIf="log['diffRT'] <= 0">
+                    {{Math.abs(log['diffRT'])}}ms Faster
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

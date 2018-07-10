@@ -1,0 +1,142 @@
+<div class="box-shadow app-wrapper">
+
+    <h6 class="margin-top-10">Select presets or upload JMX files to configure your test.</h6>
+
+    <div fxFlex fxLayout="row" class="margin-top-20" fxLayoutAlign="start center">
+        <h6>Test Presets</h6>
+    </div>
+
+    <div fxFlex fxLayout="column" class="margin-top-20">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchText" placeholder="Type to search..."
+                           [(ngModel)]="searchText" (ngModelChange)="searchChanged()">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">Select</th>
+            <th scope="col" class="align-middle">Name</th>
+            <th scope="col" class="align-middle">Project Type</th>
+            <th scope="col" class="align-middle">Test Suite</th>
+            <th scope="col" class="align-middle">Test Type</th>
+            <!--<th scope="col" class="align-middle">Action</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let preset of presets | CommonTableFilter : searchText : filterIndexIgnores ; let i = index"
+            class="cursor-pointer" (click)="checkedOrUnchecked()">
+            <td class="align-middle">
+                <mat-checkbox
+                    [(ngModel)]="preset.checkModel">
+                </mat-checkbox>
+            </td>
+            <td class="align-middle">{{preset.presetName}}</td>
+            <td class="align-middle">{{preset.projectType}}</td>
+            <td class="align-middle">{{preset.testSuite}}</td>
+            <td class="align-middle">{{preset.environment}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--<div fxFlex fxLayout="row" fxLayoutAlign="center center" *ngIf="!filteredPresets.length">-->
+        <!--<strong><p>Empty Search Result! Try with another keyword!</p></strong>-->
+    <!--</div>-->
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center" *ngIf="!hasSelectedPreset">
+        <strong><p>OR</p></strong>
+    </div>
+
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" *ngIf="!hasSelectedPreset">
+        <button mat-raised-button color="primary" class="margin-left-8f padding-horizontal-8">
+            <mat-icon style="margin-bottom: 5px">file_upload</mat-icon>
+            Upload .jmx File
+        </button>
+        <button mat-button class="margin-left-8f padding-horizontal-8 margin-top-10-f">
+            <mat-icon style="margin-bottom: 5px">file_download</mat-icon>
+            Download .jmx Template
+        </button>
+    </div>
+
+    <h6 class="margin-top-20 padding-8" *ngIf="hasSelectedPreset && filteredPresets.length">Schedule Configuration</h6>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" *ngIf="hasSelectedPreset && filteredPresets.length">
+        <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+            <div class="margin-top-20">
+                <p>1. Select Schedule Test Type</p>
+                <mat-radio-group [(ngModel)]="schedulerTestType">
+                    <div *ngFor="let schedule of schedules">
+                        <mat-radio-button [value]="schedule.name">
+                            {{schedule.name}}
+                        </mat-radio-button>
+                        <p class="font-size-12 font-color-black-50">{{ schedule.sub }}</p>
+                    </div>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+            <div fxLayout="column" fxLayoutAlign="start start" fxFlex *ngIf="schedulerTestType.length > 0">
+                <div class="margin-top-20">
+                    <p>2. Select Schedule Time</p>
+                    <mat-radio-group [(ngModel)]="schedulerTestTime">
+                        <div *ngFor="let scheduleTime of schedulesTime">
+                            <mat-radio-button [value]="scheduleTime.name">
+                                {{scheduleTime.name}}
+                            </mat-radio-button>
+                        </div>
+                    </mat-radio-group>
+
+                    <div fxFlex fxLayout="column" fxLayoutAlign="start center" *ngIf="schedulerTestTime === 'Scheduled Times per day'">
+
+                        <mat-form-field>
+                            <mat-chip-list #chipList>
+                                <mat-chip *ngFor="let time of selectedTimes; let i = index" color="primary" class="margin-4f">
+                                    {{time}}<button mat-icon-button (click)="removeTime(i)" class="button-inside-chips"><mat-icon class="icon-font-16">close</mat-icon></button>
+                                </mat-chip>
+                            </mat-chip-list>
+                            <input [matChipInputFor]="chipList">
+                        </mat-form-field>
+
+                        <button mat-button (click)="selectTime()">
+                            <mat-icon>access_time</mat-icon>
+                        </button>
+                    </div>
+
+                    <div fxFlex fxLayout="row" fxLayoutAlign="start center" *ngIf="schedulerTestTime === 'After every x Minutes'">
+                        <mat-form-field>
+                            <input matInput placeholder="30 / 60 / 90 / 120" [(ngModel)]="schedulerTestCustomTime">
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div fxFlex="33" fxLayout="column" fxLayoutAlign="start start" class="padding-8">
+            <div fxLayout="column" fxLayoutAlign="start start" fxFlex *ngIf="schedulerTestTime.length > 0">
+                <div class="margin-top-20">
+                    <p>3. Reporting</p>
+                    <mat-form-field>
+                        <input matInput placeholder="Enter test name" [(ngModel)]="schedulerTestName">
+                    </mat-form-field>
+                    <mat-checkbox
+                        [(ngModel)]="emailTo">Email to @admin@test.com
+                    </mat-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="end center" class="margin-bottom-20" *ngIf="schedulerTestName.length">
+        <button (click)="startScheduleClicked()" mat-raised-button color="primary" class="margin-left-8f padding-horizontal-8">
+            Start Schedule
+        </button>
+    </div>
+
+
+</div>

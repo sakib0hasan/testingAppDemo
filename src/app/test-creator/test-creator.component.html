@@ -1,0 +1,199 @@
+<div>
+    <mat-vertical-stepper class="box-shadow" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px;"
+                          [linear]="isLinear" #stepper="matVerticalStepper">
+        <mat-step [stepControl]="projectTypeForm">
+            <form [formGroup]="projectTypeForm">
+                <ng-template matStepLabel>Project Type</ng-template>
+                <div>
+                    <h6>Select a Project Type for Testing</h6>
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-3">
+                            <div *ngFor="let type of projectTypes;" class="project-type-list-name">
+                                {{type.name}}
+                            </div>
+                        </div>
+                        <div class="col-sm-9 col-xs-9">
+                            <div *ngFor="let type of projectTypes;" class="project-type-list">
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                                     formControlName="{{type.fieldName}}">
+                                    <label ngbButtonLabel class="btn-primary" *ngFor="let test of type.tests;">
+                                        <input ngbButton type="radio" [value]="test.name"> {{test.name}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="testSuiteForm">
+            <form [formGroup]="testSuiteForm">
+                <div
+                    *ngIf="selected.projectTypeLabel !== 'PerformanceTesting' && selected.projectTypeLabel !== 'LoadTesting'">
+                    <ng-template matStepLabel>Test Suite</ng-template>
+                    <div>
+                        <h6>Select a Project Type for Testing</h6>
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-3">
+                                <div *ngFor="let type of testSuiteTypes;" class="project-type-list-name">
+                                    {{type.name}}
+                                </div>
+                            </div>
+                            <div class="col-sm-9 col-xs-9">
+                                <div *ngFor="let type of testSuiteTypes;" class="project-type-list">
+                                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                                         formControlName="{{type.fieldName}}">
+                                        <label ngbButtonLabel class="btn-primary" *ngFor="let test of type.tests;">
+                                            <input ngbButton type="radio" [value]="test.name"> {{test.name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    *ngIf="selected.projectTypeLabel === 'PerformanceTesting' || selected.projectTypeLabel === 'LoadTesting'">
+                    <ng-template matStepLabel>Test Suite</ng-template>
+                    <div>
+                        <button (click)="testGroupSelectionClicked()" type="button" class="btn btn-primary">Test Group
+                            Selection
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Test Type</ng-template>
+            <div style="min-height: 250px;">
+                <app-test-type-panel [selectedProjectTypeLabel]="selected.projectTypeLabel"
+                                 [selectedProjectType]="selected.projectType" [selectedTestSuite]="selected.testSuite"
+                                 (testTypeChangedEvent)="testTypeChanged($event)"></app-test-type-panel>
+            </div>
+        </mat-step>
+        <mat-step [stepControl]="environmentForm">
+            <form [formGroup]="environmentForm">
+                <ng-template matStepLabel>Environment</ng-template>
+                <h6>Select the desired environment to run your test</h6>
+                <div class="row">
+                    <div class="col-sm-3 col-xs-3">
+                        <div *ngFor="let type of environmentTypes;" class="project-type-list-name">
+                            {{type.name}}
+                        </div>
+                    </div>
+                    <div class="col-sm-9 col-xs-9">
+                        <div *ngFor="let type of environmentTypes;" class="project-type-list">
+                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                                 formControlName="{{type.name}}">
+                                <label ngbButtonLabel class="btn-primary" *ngFor="let server of type.servers;">
+                                    <input ngbButton type="radio" [value]="server.name"> {{server.name}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Confirm</ng-template>
+            <p>Confirm all selections and final command.</p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col" style="margin-right: 16px;">
+                        <div class="row" style="margin-bottom: 16px;">
+                            <div class="col box-border-extended">
+                                <p>Project Type</p>
+                                <h4>{{selected.projectType}}</h4>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 16px;">
+                            <div class="col box-border-extended">
+                                <p>Test Suite</p>
+                                <h4>{{selected.testSuite}}</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col box-border-extended">
+                                <p>Environment</p>
+                                <h4>{{selected.environment}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col box-border-extended">
+                        <p>Test Specifications</p>
+                        <div *ngIf="selected.selectedTestSuite === 'Single Test'">
+                            <p>Email: {{selected.testDetailsPayload['Email']}}</p>
+                            <p>Password: {{selected.testDetailsPayload['Password']}}</p>
+                            <p>Pin: {{selected.testDetailsPayload['PIN']}}</p>
+
+                            <div *ngFor="let tl of selected.testDetailsPayload.TestLibrary">
+                                <p>{{tl.TestLibrary}} > {{tl.ScriptName}}</p>
+                                <div *ngFor="let p of tl.Params">
+                                    <p>{{p.Name}}: {{p.Value}}</p>
+                                </div>
+                                <p *ngIf="tl.Command !== ''">"{{tl.Command}}"</p>
+                            </div>
+                            <br>
+                        </div>
+                        <p *ngIf="selected.pin['value'] !== '' || selected.pin['type']!== ''">
+                            <i class="material-icons iconLine">fiber_pin</i> <span *ngIf="selected.pin['value']!== ''">{{selected.pin["value"]}}</span>
+                            <span *ngIf="selected.pin['type']!== ''">{{selected.pin["type"]}}</span>
+                        </p>
+
+                        <div
+                            *ngIf="selected.selectedTestSuite !== 'Ad-Hoc Test' && selected.selectedTestSuite !== 'Single Test'">
+                            <div *ngFor="let s of selected.scriptsSelected">
+                                <p><i class="material-icons iconLine">insert_drive_file</i> {{s}}</p>
+                            </div>
+                        </div>
+                        <div *ngIf="selected.selectedTestSuite === 'Ad-Hoc Test'">
+                            <p><i class="material-icons iconLine">insert_drive_file</i> Random scripts</p>
+                        </div>
+                        <div *ngFor="let r of selected.showResultsFor">
+                            <p><i class="material-icons iconLine">done</i> {{r}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button matStepperPrevious type="button" class="btn btn-primary">
+                    Back
+                </button>
+                <button (click)="savePreset()" type="button" class="btn btn-info">
+                    Save Preset
+                </button>
+                <button (click)="runTestClicked()" type="button" class="btn btn-success">
+                    Run Test
+                </button>
+            </div>
+        </mat-step>
+    </mat-vertical-stepper>
+
+    <div class="footer box-shadow" *ngIf="selected.projectType !== ''">
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <span class="stepNumber">1</span>
+                <span class="stepText">{{selected.projectType}}</span>
+                <mat-icon class="margin-top-1">navigate_next</mat-icon>
+            </div>
+
+            <div fxLayout="row" *ngIf="selected.testSuite !== ''">
+                <span class="stepNumber">2</span>
+                <span class="stepText">{{selected.testSuite}}</span>
+                <mat-icon class="margin-top-1">navigate_next</mat-icon>
+            </div>
+
+            <div fxLayout="row" *ngIf="scriptsSelectedLabel !== ''">
+                <span class="stepNumber">3</span>
+                <span class="stepText">{{scriptsSelectedLabel}}</span>
+                <mat-icon class="margin-top-1">navigate_next</mat-icon>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" *ngIf="selected.environment !== ''">
+                <span class="stepNumber">4</span>
+                <span class="stepText">{{selected.environment}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="box-shadow" style="padding: 10px 20px;margin: 30px 20px;border-radius: 3px; background: white;">
+    <div *ngIf="loading">
+        <h3>
+            Running Test
+        </h3>
+        <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+    <div *ngIf="!loading">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Server/Task</th>
+                <th scope="col">Result</th>
+                <th scope="col">Status</th>
+                <th scope="col">Performance</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let log of testlogs">
+                <td>{{log['task']}}</td>
+                <td>
+                    {{log['result']}}
+                </td>
+                <td>{{log['status']}}</td>
+                <td>{{log['responseTime']}} ms</td>
+            </tr>
+            </tbody>
+        </table>
+        <img [src]="screenshot1">
+        <img [src]="screenshot2">
+    </div>
+</div>

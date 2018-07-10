@@ -1,0 +1,578 @@
+<div *ngIf="viewHandler.showDropDown">
+    <div class="row">
+        <div class="col">
+            <div>
+                1. User Credential
+                <div *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="emailAddress" type="text" size="30" pInputText>
+                        <label>Email Address</label>
+                    </span>
+                </div>
+                <div *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="password" type="text" size="30" pInputText>
+                        <label>Password</label>
+                    </span>
+                </div>
+                <div *ngIf="selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry'" style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="pin" type="text" size="30" pInputText>
+                        <label>4 Digit Pin</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                2. Test Template
+                <div style="margin-top: 16px;">
+                    <p-dropdown [options]="testTemplateScripts" [(ngModel)]="selectedTestTemplate" placeholder="Select Keyword Group" optionLabel="testLibrary" [showClear]="false"></p-dropdown>
+                </div>
+                <div *ngIf="selectedTestTemplate.testCases.length > 0">
+                    <div *ngFor="let test of selectedTestTemplate.testCases" style="margin-top: 16px;">
+                        <div class="ui-g-12">
+                            <p-radioButton (onClick)="testTemplateScriptSelected(test)" value="{{test.name}}"
+                                           label="{{test.name}}"
+                                           [(ngModel)]="selectedTestTemplateScriptDummy"></p-radioButton>
+                        </div>
+                        <div *ngIf="test.name === selectedTestTemplateScript.name">
+                            <div class="ui-g-12" *ngFor="let param of selectedTestTemplateScript.params"
+                                 style="margin-top: 4px;">
+                                <span class="ui-float-label">
+                                    <input type="text" size="30" pInputText [(ngModel)]="param.value"/>
+                                    <label>{{param.name}}</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <span *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry' && selectedProjectType !== 'API Automation'" class="ui-float-label" style="margin-top: 16px;">
+                            <input type="text" size="30" pInputText [(ngModel)]="IoTCommand">
+                            <label>IoT Command</label>
+                        </span>
+                        <p *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">Select Accent</p>
+                        <div *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">
+                            <div class="ui-g" style="width:250px;margin-bottom:10px">
+                                <div class="ui-g-12">
+                                    <p-radioButton value="English" label="English" [(ngModel)]="accent"></p-radioButton>
+                                </div>
+                                <div class="ui-g-12">
+                                    <p-radioButton value="French" label="French" [(ngModel)]="accent" disabled="true"></p-radioButton>
+                                </div>
+                                <div class="ui-g-12">
+                                    <p-radioButton value="Spanish" label="Spanish" [(ngModel)]="accent" disabled="true"></p-radioButton>
+                                </div>
+                            </div>
+                        </div>
+                        <button style="margin-top: 8px;" (click)="addToSingleCases()" type="button" class="btn btn-secondary">Add to Cases</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div *ngIf="singleTestCases.length > 0">
+                3. Selected Cases
+
+                <div class="card" *ngFor="let case of singleTestCases; let i = index" style="margin: 4px 0;">
+                    <div class="card-body">
+                        {{i+1}}. {{case.testLibrary}} > {{case.selectedTestTemplateScript.name}}
+                        <div *ngFor="let p of case.selectedTestTemplateScript.params">
+                            {{p.name}}: {{p.value}}
+                        </div>
+                        <span *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'Chrome' && selectedProjectType !== 'API Automation'">"{{case.ioTCommand}}"</span>
+                    </div>
+                    <div class="cross-icon" (click)="removeSingleTestCase(i)">
+                        <i class="material-icons">cancel</i>
+                    </div>
+                </div>
+
+                <div *ngIf="selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry'" class="row" style="margin-top: 8px;">
+                    <div>
+                        <p class="margin-0">Show Results for:</p>
+                        <div class="ui-g" style="margin-bottom:10px">
+                            <div class="ui-g-12">
+                                <p-checkbox name="showResultsFor" value="Functionality" label="Functionality" [(ngModel)]="showResultsFor"></p-checkbox>
+                            </div>
+                            <div class="ui-g-12">
+                                <p-checkbox name="showResultsFor" value="Performance" label="Performance" [(ngModel)]="showResultsFor"></p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="selectedProjectType !== 'Chrome' && selectedProjectType !== 'iOS' && selectedProjectType !== 'Android'  && selectedProjectType !== 'Blackberry'" class="row" style="margin-top: 8px;">
+                    <div>
+                        <p class="margin-0">Script Settings:</p>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateOnce" label="Authenticate only once" [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateAlways" label="Authenticate with every script"
+                                           [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="col">-->
+        <!--<div>-->
+        <!--<p>Select your desired test from available scripts or upload a new script.</p>-->
+        <!--<mat-form-field>-->
+        <!--<mat-select (change)="typeChanged($event)" placeholder="Select Test Type">-->
+        <!--<mat-option *ngFor="let type of testTypes" [value]="type">-->
+        <!--{{ type.fileName }}-->
+        <!--</mat-option>-->
+        <!--</mat-select>-->
+        <!--</mat-form-field>-->
+
+        <!--<p-growl [value]="msgs" baseZIndex="99999" autoZIndex="true"></p-growl>-->
+        <!--<p-fileUpload *ngIf="viewHandler.showUpload" name="files[]" url="https://demo.appsrv.co:5050/upload" (onUpload)="onUpload($event)"-->
+        <!--multiple="multiple" accept=".py" maxFileSize="1000000">-->
+        <!--<ng-template pTemplate="content">-->
+        <!--<ul *ngIf="uploadedFiles.length">-->
+        <!--<li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>-->
+        <!--</ul>-->
+        <!--</ng-template>-->
+        <!--</p-fileUpload>-->
+        <!--<div *ngIf="!viewHandler.showUpload">-->
+        <!--<p>Required Parameters for Script:</p>-->
+        <!--<div *ngFor="let p of parameters" style="margin-top: 16px;">-->
+        <!--<span class="ui-float-label">-->
+        <!--<input name="p.name" type="text" size="30" pInputText [(ngModel)]="p.value" />-->
+        <!--<label for="p.name">{{p.label}}</label>-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col">-->
+        <!--<div>-->
+        <!--<p>Show Results for:</p>-->
+        <!--<div class="ui-g" style="width:250px;margin-bottom:10px">-->
+        <!--<div class="ui-g-12">-->
+        <!--<p-checkbox name="showResultsFor" value="Functionality" label="Functionality" [(ngModel)]="showResultsFor"></p-checkbox>-->
+        <!--</div>-->
+        <!--<div class="ui-g-12">-->
+        <!--<p-checkbox name="showResultsFor" value="Performance" label="Performance" [(ngModel)]="showResultsFor"></p-checkbox>-->
+        <!--</div>-->
+        <!--<div class="ui-g-12">-->
+        <!--<p-checkbox name="showResultsFor" disabled="true" value="Load/Stress" label="Load/Stress" [(ngModel)]="showResultsFor"></p-checkbox>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<div *ngIf="viewHandler.showScriptList">
+    <div class="row">
+        <div class="col">
+            <p>Scripts to be tested:</p>
+            <div class="ui-g" style="width:250px;margin-bottom:10px" *ngFor="let s of testTypes">
+                <div class="ui-g-12">
+                    <p-checkbox name="scriptsSelected" value="{{s.fileName}}" label="{{s.fileName}}"
+                                [(ngModel)]="scriptsSelected"></p-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div>
+                    <p>Show Results for:</p>
+                    <div class="ui-g" style="width:250px;margin-bottom:10px">
+                        <div class="ui-g-12">
+                            <p-checkbox name="showResultsFor" value="Functionality" label="Functionality"
+                                        [(ngModel)]="showResultsFor"></p-checkbox>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-checkbox name="showResultsFor" value="Performance" label="Performance"
+                                        [(ngModel)]="showResultsFor"></p-checkbox>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-checkbox name="showResultsFor" disabled="true" value="Load/Stress" label="Load/Stress"
+                                        [(ngModel)]="showResultsFor"></p-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 24px;">
+                <div>
+                    <p>Required Parameters for Script:</p>
+                    <div *ngFor="let p of parameters" style="margin-top: 16px;">
+                            <span class="ui-float-label">
+                                <input id="p.name" name="p.name" type="text" size="30" pInputText
+                                       [(ngModel)]="p.value"/>
+                                <label for="p.name">{{p.label}}</label>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-top: 26px;"
+                 *ngIf="selectedTestSuite === 'Positive Test' || selectedTestSuite === 'Negative Test'">
+                <div>
+                    <p>Select Scenario</p>
+                    <div class="ui-g" style="width:250px;margin-bottom:10px">
+                        <div class="ui-g-12">
+                            <p-radioButton name="testScenario" value="Pass" label="Pass"
+                                           [(ngModel)]="testScenario"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton name="testScenario" value="Fail" label="Fail"
+                                           [(ngModel)]="testScenario"></p-radioButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="selectedTestSuite === 'Ad-Hoc Test'">
+    <p>Random Tests will be selected. Please select PIN to be used for test:</p>
+    <div class="row">
+        <div class="col">
+            <p>PIN Specifications:</p>
+            <div class="ui-g" style="width:250px;margin-bottom:10px">
+                <div class="ui-g-12">
+                    <p-radioButton name="group1" value="Manual" label="Manually Enter PIN"
+                                   [(ngModel)]="pinSpecifications" inputId="opt1"></p-radioButton>
+                    <span style="margin-top: 16px;" class="ui-float-label" *ngIf="pinSpecifications == 'Manual'">
+                        <input id="manualPin" name="manualPin" type="text" size="30" pInputText
+                               [(ngModel)]="parameters[0].value"/>
+                        <label for="manualPin">Enter PIN</label>
+                    </span>
+                </div>
+                <div class="ui-g-12">
+                    <p-radioButton name="group1" value="RandomValid" label="Random Valid PIN"
+                                   [(ngModel)]="pinSpecifications" inputId="opt2"></p-radioButton>
+                </div>
+                <div class="ui-g-12">
+                    <p-radioButton name="group1" value="RandomInvalid" label="Random Invalid PIN"
+                                   [(ngModel)]="pinSpecifications" inputId="opt3"></p-radioButton>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <p>Show Results for:</p>
+                <div class="ui-g" style="width:250px;margin-bottom:10px">
+                    <div class="ui-g-12">
+                        <p-checkbox name="showResultsFor" value="Functionality" label="Functionality"
+                                    [(ngModel)]="showResultsFor"></p-checkbox>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-checkbox name="showResultsFor" value="Performance" label="Performance"
+                                    [(ngModel)]="showResultsFor"></p-checkbox>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-checkbox name="showResultsFor" disabled="true" value="Load/Stress" label="Load/Stress"
+                                    [(ngModel)]="showResultsFor"></p-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="selectedTestSuite === 'Keyword Group Test'">
+    <div class="row" *ngIf="!csvFileParsingDone">
+        <div class="col-lg-12" *ngIf="!csvFileParsingDone">
+            <p>Upload your CSV file to setup a keyword</p>
+            <form style="margin-bottom: 16px;">
+                <input type="file" name="file" ngModel (change)="fileUploaded($event)" accept=".csv">
+            </form>
+            <button  (click)="downloadCSVTemplate();" mat-button class="padding-horizontal-8">
+                <mat-icon style="margin-bottom: 5px">file_download</mat-icon>
+                Download CSV Template
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="csvFileParsingDone" fxFlex fxLayout="row" fxLayoutAlign="space-between start" class="margin-top-20">
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>User Credentials</h6>
+            <div>
+                <p class="margin-0 padding-0">Email</p>
+                <p>{{ csvAuthInformation.email }}</p>
+            </div>
+            <div>
+                <p class="margin-0 padding-0">Password</p>
+                <p>{{ csvAuthInformation.password }}</p>
+            </div>
+            <div>
+                <p class="margin-0 padding-0">PIN</p>
+                <p>{{ csvAuthInformation.pin }}</p>
+            </div>
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>Scripts</h6>
+            <div class="margin-top-20" *ngFor="let testItem of csvTestList">
+                <p class="margin-0">{{ testItem.testNo + '. ' + testItem.testLibrary + '> ' + testItem.testCase }}</p>
+                <p class="margin-0" *ngIf="testItem.params.length">{{ testItem.params }}</p>
+                <p>{{ testItem.string }}</p>
+            </div>
+        </div>
+
+        <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+            <h6>IoT Devices</h6>
+
+            <div class="margin-top-20">
+                <mat-radio-group [(ngModel)]="csvIoTDevice">
+                    <mat-radio-button *ngFor="let device of csvIoTDevices" [value]="device">
+                        {{device}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <h6>Show results for:</h6>
+
+            <div class="margin-top-20">
+
+                <div>
+                    <mat-checkbox
+                        [(ngModel)]="csvShowResultsFunctionality"
+                        [align]="csvCheckBoxAlign"
+                        [disabled]="csvCheckBoxDisabled">
+                        Functionality
+                    </mat-checkbox>
+                </div>
+
+                <div>
+                    <mat-checkbox
+                        [(ngModel)] = "csvCheckBoxPerformance">
+                        Performance
+                    </mat-checkbox>
+                </div>
+
+            </div>
+
+            <h6 class="margin-top-20">Show results for:</h6>
+            <div class="margin-top-20">
+                <mat-radio-group [(ngModel)]="csvScriptSettings">
+                    <mat-radio-button *ngFor="let season of csvScripts" [value]="season">
+                        {{season}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div *ngIf="selectedProjectTypeLabel === 'PerformanceTesting'">
+    <div class="row">
+        <div class="col">
+            <div>
+                1. User Credential
+                <div *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="emailAddress" type="text" size="30" pInputText>
+                        <label>Email Address</label>
+                    </span>
+                </div>
+                <div *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="password" type="text" size="30" pInputText>
+                        <label>Password</label>
+                    </span>
+                </div>
+                <div style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="pin" type="text" size="30" pInputText>
+                        <label>4 Digit Pin</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                2. Test Template
+                <div style="margin-top: 16px;">
+                    <p-dropdown [options]="testTemplateScripts" [(ngModel)]="selectedTestTemplate" placeholder="Select Keyword Group" optionLabel="testLibrary" [showClear]="false"></p-dropdown>
+                </div>
+                <div *ngIf="selectedTestTemplate.testCases.length > 0">
+                    <div *ngFor="let test of selectedTestTemplate.testCases" style="margin-top: 16px;">
+                        <div class="ui-g-12">
+                            <p-radioButton (onClick)="testTemplateScriptSelected(test)" value="{{test.name}}"
+                                           label="{{test.name}}"
+                                           [(ngModel)]="selectedTestTemplateScriptDummy"></p-radioButton>
+                        </div>
+                        <div *ngIf="test.name === selectedTestTemplateScript.name">
+                            <div class="ui-g-12" *ngFor="let param of selectedTestTemplateScript.params"
+                                 style="margin-top: 4px;">
+                                <span class="ui-float-label">
+                                    <input type="text" size="30" pInputText [(ngModel)]="param.value"/>
+                                    <label>{{param.name}}</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <span *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" class="ui-float-label" style="margin-top: 16px;">
+                            <input type="text" size="30" pInputText [(ngModel)]="IoTCommand">
+                            <label>IoT Command</label>
+                        </span>
+                        <button style="margin-top: 8px;" (click)="addToSingleCases()" type="button" class="btn btn-secondary">Add to Cases</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div *ngIf="singleTestCases.length > 0">
+                3. Selected Cases
+
+                <div class="card" *ngFor="let case of singleTestCases; let i = index" style="margin: 4px 0;">
+                    <div class="card-body">
+                        {{i+1}}. {{case.testLibrary}} > {{case.selectedTestTemplateScript.name}}
+                        <div *ngFor="let p of case.selectedTestTemplateScript.params">
+                            {{p.name}}: {{p.value}}
+                        </div>
+                        "{{case.ioTCommand}}"
+                    </div>
+                    <div class="cross-icon" (click)="removeSingleTestCase(i)">
+                        <i class="material-icons">cancel</i>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 8px; margin-left: 14px">
+                    <div>
+                        <p class="margin-0">Request Configuration</p>
+                        <div class="ui-g-12">
+                            <p-radioButton value="Parallel" label="Parallel" [(ngModel)]="requestConfiguration"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton value="Sequential" label="Sequential" [(ngModel)]="requestConfiguration"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12" style="margin-bottom:10px">
+                            <input style="width: 50px;" type="number" [(ngModel)]="loops"> Loops
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 8px; margin-left: 14px">
+                    <div>
+                        <p class="margin-0">Script Settings:</p>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateOnce" label="Authenticate only once" [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateAlways" label="Authenticate with every script"
+                                           [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="selectedProjectTypeLabel === 'LoadTesting'">
+    <div class="row">
+        <div class="col">
+            <div>
+                1. User Credential
+                <div style="margin-top: 16px;">
+                    <span class="ui-float-label">
+                        <input [(ngModel)]="pin" type="text" size="30" pInputText>
+                        <label>4 Digit Pin</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                2. Test Template
+                <div style="margin-top: 16px;">
+                    <p-dropdown [options]="testTemplateScripts" [(ngModel)]="selectedTestTemplate" placeholder="Select Keyword Group" optionLabel="testLibrary" [showClear]="false"></p-dropdown>
+                </div>
+                <div *ngIf="selectedTestTemplate.testCases.length > 0">
+                    <div *ngFor="let test of selectedTestTemplate.testCases" style="margin-top: 16px;">
+                        <div class="ui-g-12">
+                            <p-radioButton (onClick)="testTemplateScriptSelected(test)" value="{{test.name}}"
+                                           label="{{test.name}}"
+                                           [(ngModel)]="selectedTestTemplateScriptDummy"></p-radioButton>
+                        </div>
+                        <div *ngIf="test.name === selectedTestTemplateScript.name">
+                            <div class="ui-g-12" *ngFor="let param of selectedTestTemplateScript.params"
+                                 style="margin-top: 4px;">
+                                <span class="ui-float-label">
+                                    <input type="text" size="30" pInputText [(ngModel)]="param.value"/>
+                                    <label>{{param.name}}</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="ui-g-12">-->
+                        <!--<span *ngIf="selectedProjectType !== 'API Only' && selectedProjectType !== 'API Automation'" class="ui-float-label" style="margin-top: 16px;">-->
+                            <!--<input type="text" size="30" pInputText [(ngModel)]="IoTCommand">-->
+                            <!--<label>IoT Command</label>-->
+                        <!--</span>-->
+                    <!--</div>-->
+                    <button style="margin-top: 8px;" (click)="addToSingleCases()" type="button" class="btn btn-secondary">Add to Cases</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div *ngIf="singleTestCases.length > 0">
+                3. Selected Cases
+
+                <div class="card" *ngFor="let case of singleTestCases; let i = index" style="margin: 4px 0;">
+                    <div class="card-body">
+                        {{i+1}}. {{case.testLibrary}} > {{case.selectedTestTemplateScript.name}}
+                        <div *ngFor="let p of case.selectedTestTemplateScript.params">
+                            {{p.name}}: {{p.value}}
+                        </div>
+                        "{{case.ioTCommand}}"
+                    </div>
+                    <div class="cross-icon" (click)="removeSingleTestCase(i)">
+                        <i class="material-icons">cancel</i>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 8px; margin-left: 14px">
+                    <div>
+                        <p class="margin-0">Load Type</p>
+                        <div class="ui-g-12">
+                            <p-radioButton value="Ramp" label="Ramp" [(ngModel)]="loadType"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton value="Constant" label="Constant" [(ngModel)]="loadType"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12" style="margin-bottom:10px">
+                            <input style="width: 50px;" type="number" [(ngModel)]="threads"> Thread (Users)
+                        </div>
+                        <div class="ui-g-12" style="margin-bottom:10px">
+                            <input style="width: 50px;" type="number" [(ngModel)]="ramPeriod"> Ramp Period (Seconds)
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 8px; margin-left: 14px">
+                    <div>
+                        <p class="margin-0">Script Settings:</p>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateOnce" label="Authenticate only once" [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                        <div class="ui-g-12">
+                            <p-radioButton value="AuthenticateAlways" label="Authenticate with every script"
+                                           [(ngModel)]="scriptSetting"></p-radioButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <button (click)="backClicked($event)" type="button" class="btn btn-primary">
+        Back
+    </button>
+    <button (click)="nextClicked($event)" type="button" class="btn btn-primary">
+        Next
+    </button>
+</div>

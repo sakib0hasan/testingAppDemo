@@ -1,0 +1,22 @@
+<ng-container *ngIf="shouldRun">
+    <mat-sidenav-container class="optimo-nav-container">
+        <mat-sidenav #sidenav mode="side" opened="true" class="optiomo-sidenav"
+                     [fixedInViewport]="true" [fixedTopGap]="options.value.top"
+                     [fixedBottomGap]="options.value.bottom">
+
+            <mat-list>
+                <mat-list-item *ngFor="let item of navItems">
+                    <a class="nav-link" routerLinkActive="active" routerLink="{{ item.route }}" style="font-size: 1em;" (click)="working(item)">
+                        <i class="fa {{ item.icon }}" style="margin-left: 5px;margin-right: 12px;"></i> {{ item.title }}
+                    </a>
+                </mat-list-item>
+            </mat-list>
+
+
+        </mat-sidenav>
+
+        <mat-sidenav-content [formGroup]="options" class="optimo-sidenav-container">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</ng-container>

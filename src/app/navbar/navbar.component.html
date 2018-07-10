@@ -1,0 +1,22 @@
+<mat-toolbar class="fixed-top box-shadow nav-wrapper padding-h-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="row-white row-100">
+        <div class="row-white" fxLayout="column" fxLayoutAlign="center center" style="width: 250px; height: 100%">
+            <a class="toolbar-brand" href="/">
+                <img class="logo" src="../../assets/img/logo.png"/>
+            </a>
+        </div>
+        <div fxLayout="row" fxFlex fxLayoutAlign="space-between center" class="toolbar-header row-white">
+            <span class="router-title">{{title}}</span>
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+                <div class="cursor-pointer">
+                    <mat-icon>notifications</mat-icon>
+                </div>
+                <div class="cursor-pointer">
+                    <mat-icon class="nav-font-size-35 margin-left-8f margin-right-20">account_circle</mat-icon>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</mat-toolbar>
